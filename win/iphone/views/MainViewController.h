@@ -34,6 +34,7 @@
 @class MessageView;
 @class MapView;
 @class ActionBar;
+@class PieMenu;
 
 @interface MainViewController : UIViewController <UITextFieldDelegate> {
 
@@ -48,6 +49,7 @@
 	ActionViewController *actionViewController;
 	InventoryViewController *inventoryViewController;
 	MenuViewController *menuViewController;
+	PieMenu *pieMenu;
 	
 	BOOL directionQuestion;
 	
@@ -60,6 +62,7 @@
 @property (readonly) InventoryViewController *inventoryViewController;
 @property (readonly) UINavigationController *inventoryNavigationController;
 @property (readonly) MenuViewController *menuViewController;
+@property (nonatomic, retain) PieMenu *pieMenu;
 
 + (MainViewController *) instance;
 
@@ -94,6 +97,12 @@
 - (void)handleMapTapTileX:(int)x y:(int)y forLocation:(CGPoint)p inView:(UIView *)view;
 - (void)handleDirectionTap:(e_direction)direction;
 - (void)handleDirectionDoubleTap:(e_direction)direction;
+
+// pie handling
+- (void)pieMenuMoved:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)pieMenuEnded:(NSSet *)touches withEvent:(UIEvent *)event;
+- (BOOL)pieMenuHasItems;
+- (PieMenu *)pieMenu;
 
 // utility
 

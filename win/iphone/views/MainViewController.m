@@ -44,6 +44,7 @@
 #import "CommandButtonItem.h"
 #import "ActionBar.h"
 #import "QuestionViewController.h"
+#import "PieMenu.h"
 
 #import "winiphone.h" // ipad_getpos etc.
 
@@ -52,6 +53,8 @@
 static MainViewController* instance;
 
 @implementation MainViewController
+
+@synthesize pieMenu;
 
 enum rotation_lock {
 	none, portrait, landscape
@@ -82,6 +85,13 @@ enum rotation_lock {
 
 - (void)awakeFromNib {
 	[super awakeFromNib]; // responsible for viewDidLoad
+	
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	
+	pieMenu = [[PieMenu alloc] init];
+	pieMenu.fingerSize = [defaults integerForKey:@"fingerSize"];
+	pieMenu.leftHanded = [defaults boolForKey:@"leftHanded"];
+	
 	instance = self;
 }
 
@@ -575,9 +585,10 @@ enum rotation_lock {
 	} else if (!iphone_getpos) {
 		if (u.ux == x && u.uy == y) {
 			// tap on self
-			NSArray *commands = [NhCommand allCurrentCommands];
-			self.actionViewController.actions = commands;
-			[self presentModalViewController:actionViewController animated:YES];
+			//NSArray *commands = [NhCommand allCurrentCommands];
+			//self.actionViewController.actions = commands;
+			//[self presentModalViewController:actionViewController animated:YES];
+			[[self pieMenu] showInView:self.view atPoint:p];
 		} else {
 			coord delta = CoordMake(u.ux-x, u.uy-y);
 			if (abs(delta.x) <= 1 && abs(delta.y) <= 1 ) {
@@ -671,6 +682,62 @@ enum rotation_lock {
 }
 
 #pragma mark utility
+
+#pragma mark PieMenu
+- (void) itemSelected:(PieMenuItem *)item {
+	NSLog(@"Item '%s' selected", [item.title UTF8String]);
+	[item invoke:self];
+}
+
+- (void)pieMenuMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+	if ([[pieMenu items] count]) {
+		[[pieMenu pieView] touchesMoved:touches withEvent:event];
+	}
+}
+
+- (BOOL)pieMenuHasItems {
+	return [[pieMenu items] count];
+}
+
+- (void)pieMenuEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	if ([[pieMenu items] count]) {
+		[[pieMenu pieView] touchesEnded:touches withEvent:event];
+		[pieMenu removeAllItems];
+	}
+}
+
+- (PieMenu *)pieMenu {
+	if (!pieMenu) {
+		pieMenu = [[PieMenu alloc] init];
+	}
+	[pieMenu removeAllItems];
+	NSDictionary *actions = [NhCommand currentCommands];
+	
+	NSLog(@"Item Count: %d", actions.count);
+	
+	if (actions.count > 0) {
+		//NSLog(@"Actions: %@", actions);
+
+		for (id menuKey in actions) {
+			NSLog(@"Propogating Key: %@", menuKey);
+			PieMenuItem * menuItem = [[PieMenuItem alloc] initWithTitle:menuKey label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:nil];
+			NSEnumerator *enumerator = [[actions objectForKey:menuKey] objectEnumerator];
+			NhCommand *cmd;
+			
+			for (cmd in enumerator) {
+				NSLog(@"Adding Item: %@", [cmd title]);
+				PieMenuItem *item = [[PieMenuItem alloc] initWithTitle:[cmd title] label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:cmd];
+				[menuItem addSubItem:item];
+				[item release];	
+			}
+			[pieMenu addItem:menuItem];
+			[menuItem release];
+		}
+	} else {
+		NSLog(@"Too many or too few items in the command list.");
+	}
+	return pieMenu;
+}
 
 #pragma mark UIAlertViewDelegate
 

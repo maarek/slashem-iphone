@@ -42,6 +42,15 @@
 #define kMisc (@"Misc")
 #define kInternal (@"Internal")
 
+#define kAltar (@"Altar")
+#define kFountain (@"Fountain/Sink")
+#define kThrone (@"Throne")
+#define kDoor (@"Door")
+#define kTrap (@"Trap") 
+
+#define kContainer (@"Container")
+
+
 @class NhObject;
 
 @interface NhCommand : Action {

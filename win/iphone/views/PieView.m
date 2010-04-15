@@ -7,6 +7,9 @@
 //
 
 #import "PieView.h"
+#import "MainViewController.h"
+
+#include "hack.h"
 
 
 #define kStartAngle				8.0
@@ -348,21 +351,32 @@
 	if (selectedItem != kNoItemSelected) {
 		if (items[selectedItem].type == PieMenuItemTypeParent) {
 			NSValue *miValue = [NSValue value:&p withObjCType:@encode(CGPoint)];
-			self.timer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(subitemsTimerFired:) userInfo:miValue repeats:NO];
+			self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(subitemsTimerFired:) userInfo:miValue repeats:NO];
 		} else if (items[selectedItem].type == PieMenuItemTypeBack) {
 			NSValue *miValue = [NSValue value:&p withObjCType:@encode(CGPoint)];
-			self.timer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(parentTimerFired:) userInfo:miValue repeats:NO];
+			self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(parentTimerFired:) userInfo:miValue repeats:NO];
 		}
 	}
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	UITouch *touch = [touches anyObject];
+	CGPoint p = [touch locationInView:self];
+
 	if ([timer isValid]) {
 		[timer invalidate];
 	}
 	if (selectedItem != kNoItemSelected) {
-		[self itemSelected:selectedItem];
-		selectedItem = kNoItemSelected;
+		if (items[selectedItem].type == PieMenuItemTypeParent) {
+			NSValue *miValue = [NSValue value:&p withObjCType:@encode(CGPoint)];
+			self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(subitemsTimerFired:) userInfo:miValue repeats:NO];
+		} else if (items[selectedItem].type == PieMenuItemTypeBack) {
+			NSValue *miValue = [NSValue value:&p withObjCType:@encode(CGPoint)];
+			self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(parentTimerFired:) userInfo:miValue repeats:NO];
+		} else {
+			[self itemSelected:selectedItem];
+			selectedItem = kNoItemSelected;
+		}
 	} else {
 		[self itemSelected:kNoItemSelected];
 	}

@@ -585,9 +585,6 @@ enum rotation_lock {
 	} else if (!iphone_getpos) {
 		if (u.ux == x && u.uy == y) {
 			// tap on self
-			//NSArray *commands = [NhCommand allCurrentCommands];
-			//self.actionViewController.actions = commands;
-			//[self presentModalViewController:actionViewController animated:YES];
 			[[self pieMenu] showInView:self.view atPoint:p];
 		} else {
 			coord delta = CoordMake(u.ux-x, u.uy-y);
@@ -612,6 +609,13 @@ enum rotation_lock {
 }
 
 - (void)handleDirectionTap:(e_direction)direction {
+	if (self.pieMenuHasItems)
+	{
+		[pieMenu removeMenu];
+		[pieMenu removeAllItems];
+		return;
+	}
+	
 	if (!iphone_getpos) {
 		if (directionQuestion) {
 			directionQuestion = NO;
@@ -689,21 +693,8 @@ enum rotation_lock {
 	[item invoke:self];
 }
 
-- (void)pieMenuMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-	if ([[pieMenu items] count]) {
-		[[pieMenu pieView] touchesMoved:touches withEvent:event];
-	}
-}
-
 - (BOOL)pieMenuHasItems {
 	return [[pieMenu items] count];
-}
-
-- (void)pieMenuEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-	if ([[pieMenu items] count]) {
-		[[pieMenu pieView] touchesEnded:touches withEvent:event];
-		[pieMenu removeAllItems];
-	}
 }
 
 - (PieMenu *)pieMenu {
@@ -714,17 +705,34 @@ enum rotation_lock {
 	NSDictionary *actions = [NhCommand currentCommands];
 	
 	NSLog(@"Item Count: %d", actions.count);
-	
+
 	if (actions.count > 0) {
-		//NSLog(@"Actions: %@", actions);
+		NSLog(@"Actions: %@", actions);
 
 		for (id menuKey in actions) {
 			NSLog(@"Propogating Key: %@", menuKey);
-			PieMenuItem * menuItem = [[PieMenuItem alloc] initWithTitle:menuKey label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:nil];
+			PieMenuItem *menuItem = [[PieMenuItem alloc] initWithTitle:menuKey label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:nil];
+			PieMenuItem *moreMenu;
 			NSEnumerator *enumerator = [[actions objectForKey:menuKey] objectEnumerator];
 			NhCommand *cmd;
+			int cmdCount = 0;
 			
 			for (cmd in enumerator) {
+				if (cmdCount == 4 && [[actions objectForKey:menuKey] count] > 5) {
+					NSLog(@"Creating the More menu %@ has %d number of entries.", [cmd title], [[actions objectForKey:menuKey] count]);
+					moreMenu = [[PieMenuItem alloc] initWithTitle:@"More" label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:nil];
+					[menuItem addSubItem:moreMenu];	
+				}
+				if (cmdCount >= 4 && [[actions objectForKey:menuKey] count] > 5) {
+					NSLog(@"Adding Item to More Menu: %@", [cmd title]);
+					cmdCount++;
+					PieMenuItem *item = [[PieMenuItem alloc] initWithTitle:[cmd title] label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:cmd];
+					[moreMenu addSubItem:item];
+					[item release];						
+					continue;			
+				}
+				cmdCount++;
+				
 				NSLog(@"Adding Item: %@", [cmd title]);
 				PieMenuItem *item = [[PieMenuItem alloc] initWithTitle:[cmd title] label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:cmd];
 				[menuItem addSubItem:item];
@@ -732,6 +740,7 @@ enum rotation_lock {
 			}
 			[pieMenu addItem:menuItem];
 			[menuItem release];
+			//if (moreMenu) [moreMenu release];
 		}
 	} else {
 		NSLog(@"Too many or too few items in the command list.");

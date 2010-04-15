@@ -44,6 +44,7 @@ typedef enum {
 - (void) addItem:(PieMenuItem *)item;
 //- (void) removeItem:(PieMenuItem *)item; // TODO
 - (void) removeAllItems;
+- (void) removeMenu;
 - (UIView *) view;
 - (void) itemWithSubitemsSelected:(PieMenuItem *)theItem withIndex:(NSInteger)theIndex atPoint:(CGPoint)thePoint;
 - (void) parentItemSelected:(PieMenuItem *)theItem withIndex:(NSInteger)theIndex atPoint:(CGPoint)thePoint;

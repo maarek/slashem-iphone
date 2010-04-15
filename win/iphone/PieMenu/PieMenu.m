@@ -8,6 +8,7 @@
 
 #import "PieMenu.h"
 #import "PieView.h"
+#import "MainViewController.h"
 
 #define kImageSize          64
 
@@ -86,6 +87,8 @@ CGContextRef MyCreateBitmapContext (int pixelsWide, int pixelsHigh) {
 }
 
 - (void) showInView:(UIView *)theView atPoint:(CGPoint)thePoint {
+	UIView *mvcView = [[MainViewController instance] view];
+	thePoint = CGPointMake(mvcView.bounds.size.width/2, mvcView.bounds.size.height/2);
 	self.parentView = theView;
 	if (pieView == nil) {
 		self.pieView = [[PieView alloc] initWithFrame:CGRectZero];
@@ -118,6 +121,11 @@ CGContextRef MyCreateBitmapContext (int pixelsWide, int pixelsHigh) {
 	[self.pieView removeFromSuperview];
 	[UIView commitAnimations];
 	on = NO;
+}
+
+- (void) removeMenu {
+	[self hideMenu];
+	[pieView clearItems];
 }
 
 - (void) itemSelected:(PieMenuItem *)item {
@@ -217,6 +225,7 @@ CGContextRef MyCreateBitmapContext (int pixelsWide, int pixelsHigh) {
 		if ([theItem subitemAtIndex:i])
 			[pieView addItem:[theItem subitemAtIndex:i]];
 	}
+
 	[self showInView:parentView atPoint:point];
 }
 

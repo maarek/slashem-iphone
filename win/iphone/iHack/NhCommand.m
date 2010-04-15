@@ -75,7 +75,7 @@ static NSArray *g_captions;
 }
 
 + (void)addCommand:(NhCommand *)cmd toCommands:(NSMutableDictionary *)commands key:(NSString *)key {
-	NSArray *keys = [NSArray arrayWithObjects:key, kInternal, nil];
+	NSArray *keys = [NSArray arrayWithObjects:key, nil];  // Removed kInternal (list of all commands?) Maarek
 	
 	for (NSString *k in keys) {
 		NSMutableArray *array = [commands objectForKey:k];

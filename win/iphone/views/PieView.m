@@ -226,8 +226,12 @@
 				CGContextSetRGBFillColor(context, 51.0/255.0, 51.0/255.0, 51.0/255.0, 1.0);
 				CGContextSetShadowWithColor(context, CGSizeMake(0, -1.0), 0.0, myColor);
 			}
-			[txt drawAtPoint:CGPointMake(labelCenter.x - titleSize.width / 2.0, labelCenter.y - titleSize.height / 2.0) withFont:font];	
-		
+			
+			if (txt.length > 10)
+				[txt drawInRect:CGRectMake(labelCenter.x - titleSize.width / 2.5, labelCenter.y - titleSize.height / 2.0, 50, 60) withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentCenter];
+			else 
+				[txt drawAtPoint:CGPointMake(labelCenter.x - titleSize.width / 2.0, labelCenter.y - titleSize.height / 2.0) withFont:font];	
+
 			CGContextRestoreGState(context);
 		}
 		startAngle -= pieceAngle;

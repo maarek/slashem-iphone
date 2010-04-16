@@ -718,11 +718,13 @@ enum rotation_lock {
 			int cmdCount = 0;
 			
 			for (cmd in enumerator) {
+				// If more than 5 NhCommands then create a new sub menu labled More
 				if (cmdCount == 4 && [[actions objectForKey:menuKey] count] > 5) {
 					NSLog(@"Creating the More menu %@ has %d number of entries.", [cmd title], [[actions objectForKey:menuKey] count]);
 					moreMenu = [[PieMenuItem alloc] initWithTitle:@"More" label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:nil];
 					[menuItem addSubItem:moreMenu];	
 				}
+				// Populate More with excess NhCommands
 				if (cmdCount >= 4 && [[actions objectForKey:menuKey] count] > 5) {
 					NSLog(@"Adding Item to More Menu: %@", [cmd title]);
 					cmdCount++;
@@ -731,16 +733,28 @@ enum rotation_lock {
 					[item release];						
 					continue;			
 				}
+				// Top Level Case
+				if (menuKey == kTopLevel)
+				{
+					NSLog(@"Adding Item: %@", [cmd title]);
+					cmdCount++;
+					PieMenuItem *item = [[PieMenuItem alloc] initWithTitle:[cmd title] label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:nil] command:cmd];
+					[pieMenu addItem:item];
+					[item release];
+					continue;
+				}
+					
 				cmdCount++;
 				
 				NSLog(@"Adding Item: %@", [cmd title]);
-				PieMenuItem *item = [[PieMenuItem alloc] initWithTitle:[cmd title] label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:cmd];
+				PieMenuItem *item = [[PieMenuItem alloc] initWithTitle:[cmd title] label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:nil] command:cmd];
 				[menuItem addSubItem:item];
 				[item release];	
 			}
-			[pieMenu addItem:menuItem];
+			
+			if (menuKey != kTopLevel) [pieMenu addItem:menuItem]; // Don't need to add the TopLevel menu
 			[menuItem release];
-			//if (moreMenu) [moreMenu release];
+			//if (moreMenu) [moreMenu release];  // Release the moreMenu (Causes errors?)
 		}
 	} else {
 		NSLog(@"Too many or too few items in the command list.");

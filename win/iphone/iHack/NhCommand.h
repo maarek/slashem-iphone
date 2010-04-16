@@ -37,18 +37,12 @@
 #define C(c)		(0x1f & (c))
 #endif
 
+
+#define kTopLevel (@"TopLevel")
 #define kDungeon (@"Dungeon")
 #define kFloor (@"Floor")
 #define kMisc (@"Misc")
 #define kInternal (@"Internal")
-
-#define kAltar (@"Altar")
-#define kFountain (@"Fountain/Sink")
-#define kThrone (@"Throne")
-#define kDoor (@"Door")
-#define kTrap (@"Trap") 
-
-#define kContainer (@"Container")
 
 
 @class NhObject;

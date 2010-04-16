@@ -33,7 +33,9 @@ static NSArray *g_captions;
 @implementation NhCommand
 
 + (void)initialize {
+	// Can only have 7 items (TopLevel Commands + Menus)
 	g_captions = [[NSArray alloc] initWithObjects:
+				  kTopLevel, // Any command that might go on the top level
 				  kDungeon,  // dungeon features (stairs, doors)
 				  kFloor,    // objects lying on the floor
 				  kMisc,     // everything else
@@ -154,17 +156,18 @@ enum InvFlags {
 	if ((u.ux == xupstair && u.uy == yupstair)
 		|| (u.ux == sstairs.sx && u.uy == sstairs.sy && sstairs.up)
 		|| (u.ux == xupladder && u.uy == yupladder)) {
-		[self addCommand:[NhCommand commandWithTitle:"Up" key:'<'] toCommands:commands key:kDungeon];
+		[self addCommand:[NhCommand commandWithTitle:"Up" key:'<'] toCommands:commands key:kTopLevel];
 	} else if ((u.ux == xdnstair && u.uy == ydnstair)
 			   || (u.ux == sstairs.sx && u.uy == sstairs.sy && !sstairs.up)
 			   || (u.ux == xdnladder && u.uy == ydnladder)) {
-		[self addCommand:[NhCommand commandWithTitle:"Down" key:'>'] toCommands:commands key:kDungeon];
+		[self addCommand:[NhCommand commandWithTitle:"Down" key:'>'] toCommands:commands key:kTopLevel];
 	}
 	
 	// objects lying on the floor
 	struct obj *object = level.objects[u.ux][u.uy];
 	if (object) {
-		[self addCommand:[NhCommand commandWithTitle:"Pickup" key:','] toCommands:commands key:kFloor]; // Bring out
+		[self addCommand:[NhCommand commandWithTitle:"Pickup" key:','] toCommands:commands key:kFloor];
+		[self addCommand:[NhCommand commandWithTitle:"Pickup" key:','] toCommands:commands key:kTopLevel];
 		[self addCommand:[NhCommand commandWithTitle:"What's here" key:':'] toCommands:commands key:kFloor];
 		while (object) {
 			if (Is_container(object)) {

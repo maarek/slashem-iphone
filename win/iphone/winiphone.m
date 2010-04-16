@@ -169,12 +169,12 @@ void intron() {}
 void introff() {}
 
 int dosuspend() {
-	NSLog(@"dosuspend");
+	DebugLog(@"dosuspend");
 	return 0;
 }
 
 void error(const char *s, ...) {
-	//NSLog(@"error: %s");
+	//DebugLog(@"error: %s");
 	char message[512];
 	va_list ap;
 	va_start(ap, s);
@@ -188,7 +188,7 @@ void error(const char *s, ...) {
 #pragma mark nethack window API
 
 void iphone_init_nhwindows(int* argc, char** argv) {
-	//NSLog(@"init_nhwindows");
+	//DebugLog(@"init_nhwindows");
 	iflags.runmode = RUN_STEP;
 	iflags.window_inited = TRUE;
 	iflags.use_color = TRUE;
@@ -207,24 +207,24 @@ void iphone_init_nhwindows(int* argc, char** argv) {
 }
 
 void iphone_askname() {
-	//NSLog(@"askname");
+	//DebugLog(@"askname");
 	iphone_getlin("Enter your name", plname);
 }
 
 void iphone_get_nh_event() {
-	//NSLog(@"get_nh_event");
+	//DebugLog(@"get_nh_event");
 }
 
 void iphone_exit_nhwindows(const char *str) {
-	//NSLog(@"exit_nhwindows %s", str);
+	//DebugLog(@"exit_nhwindows %s", str);
 }
 
 void iphone_suspend_nhwindows(const char *str) {
-	//NSLog(@"suspend_nhwindows %s", str);
+	//DebugLog(@"suspend_nhwindows %s", str);
 }
 
 void iphone_resume_nhwindows() {
-	//NSLog(@"resume_nhwindows");
+	//DebugLog(@"resume_nhwindows");
 }
 
 winid iphone_create_nhwindow(int type) {
@@ -243,24 +243,24 @@ winid iphone_create_nhwindow(int type) {
 			w = [[NhWindow alloc] initWithType:type];
 			break;
 	}
-	//NSLog(@"create_nhwindow(%x) %x", type, w);
+	//DebugLog(@"create_nhwindow(%x) %x", type, w);
 	return (winid) w;
 }
 
 void iphone_clear_nhwindow(winid wid) {
-	//NSLog(@"clear_nhwindow %x", wid);
+	//DebugLog(@"clear_nhwindow %x", wid);
 	[(NhWindow *) wid clear];
 }
 
 void iphone_display_nhwindow(winid wid, BOOLEAN_P block) {
-	//NSLog(@"display_nhwindow %x, %i, %i", wid, ((NhWindow *) wid).type, block);
+	//DebugLog(@"display_nhwindow %x, %i, %i", wid, ((NhWindow *) wid).type, block);
 	((NhWindow *) wid).blocking = block;
 	[[MainViewController instance] displayWindow:(NhWindow *) wid];
 	((NhWindow *) wid).blocking = NO;
 }
 
 void iphone_destroy_nhwindow(winid wid) {
-	//NSLog(@"destroy_nhwindow %x", wid);
+	//DebugLog(@"destroy_nhwindow %x", wid);
 	NhWindow *w = (NhWindow *) wid;
 	if (w != [NhWindow messageWindow] && w != [NhWindow statusWindow] && w != [NhWindow mapWindow]) {
 		[w release];
@@ -268,11 +268,11 @@ void iphone_destroy_nhwindow(winid wid) {
 }
 
 void iphone_curs(winid wid, int x, int y) {
-	//NSLog(@"curs %x %d,%d", wid, x, y);
+	//DebugLog(@"curs %x %d,%d", wid, x, y);
 }
 
 void iphone_putstr(winid wid, int attr, const char *text) {
-	//NSLog(@"putstr %x %s", wid, text);
+	//DebugLog(@"putstr %x %s", wid, text);
 	if (wid == WIN_ERR || !wid) {
 		wid = BASE_WINDOW;
 	}
@@ -280,7 +280,7 @@ void iphone_putstr(winid wid, int attr, const char *text) {
 }
 
 void iphone_display_file(const char *filename, BOOLEAN_P must_exist) {
-	//NSLog(@"display_file %s", filename);
+	//DebugLog(@"display_file %s", filename);
 	char path[FQN_MAX_FILENAME];
 	[WinIPhone expandFilename:filename intoPath:path];
 	NSError *error = nil;
@@ -297,14 +297,14 @@ void iphone_display_file(const char *filename, BOOLEAN_P must_exist) {
 }
 
 void iphone_start_menu(winid wid) {
-	//NSLog(@"start_menu %x", wid);
+	//DebugLog(@"start_menu %x", wid);
 	[(NhMenuWindow *) wid startMenu];
 }
 
 void iphone_add_menu(winid wid, int glyph, const ANY_P *identifier,
 					 CHAR_P accelerator, CHAR_P group_accel, int attr, 
 					 const char *str, BOOLEAN_P presel) {
-	//NSLog(@"add_menu %x %s", wid, str);
+	//DebugLog(@"add_menu %x %s", wid, str);
 	NhMenuWindow *w = (NhMenuWindow *) wid;
 	NSString *title = [[NSString stringWithFormat:@"%s", str] stringWithTrimmedWhitespaces];
 	if (identifier->a_void != 0) {
@@ -320,7 +320,7 @@ void iphone_add_menu(winid wid, int glyph, const ANY_P *identifier,
 }
 
 void iphone_end_menu(winid wid, const char *prompt) {
-	//NSLog(@"end_menu %x, %s", wid, prompt);
+	//DebugLog(@"end_menu %x, %s", wid, prompt);
 	if (prompt) {
 		((NhMenuWindow *) wid).prompt = [NSString stringWithFormat:@"%s", prompt];
 		iphone_putstr(WIN_MESSAGE, 0, prompt);
@@ -331,7 +331,7 @@ void iphone_end_menu(winid wid, const char *prompt) {
 }
 
 int iphone_select_menu(winid wid, int how, menu_item **selected) {
-	//NSLog(@"select_menu %x", wid);
+	//DebugLog(@"select_menu %x", wid);
 	NhMenuWindow *w = (NhMenuWindow *) wid;
 	w.how = how;
 	*selected = NULL;
@@ -349,51 +349,51 @@ int iphone_select_menu(winid wid, int how, menu_item **selected) {
 }
 
 void iphone_update_inventory() {
-	//NSLog(@"update_inventory");
+	//DebugLog(@"update_inventory");
 	[[MainViewController instance] updateInventory];
 }
 
 void iphone_mark_synch() {
-	//NSLog(@"mark_synch");
+	//DebugLog(@"mark_synch");
 }
 
 void iphone_wait_synch() {
-	//NSLog(@"wait_synch");
+	//DebugLog(@"wait_synch");
 //	[[MainViewController instance] refreshAllViews];
 }
 
 void iphone_cliparound(int x, int y) {
-	//NSLog(@"cliparound %d,%d", x, y);
+	//DebugLog(@"cliparound %d,%d", x, y);
 	[[MainViewController instance] clipAroundX:x y:y];
 }
 
 void iphone_cliparound_window(winid wid, int x, int y) {
-	NSLog(@"cliparound_window %x %d,%d", wid, x, y);
+	DebugLog(@"cliparound_window %x %d,%d", wid, x, y);
 }
 
 void iphone_print_glyph(winid wid, XCHAR_P x, XCHAR_P y, int glyph) {
-	//NSLog(@"print_glyph %x %d,%d", wid, x, y);
+	//DebugLog(@"print_glyph %x %d,%d", wid, x, y);
 	[(NhMapWindow *) wid printGlyph:glyph atX:x y:y];
 }
 
 void iphone_raw_print(const char *str) {
-	NSLog(@"raw_print %s", str);
+	DebugLog(@"raw_print %s", str);
 	iphone_putstr((winid) [NhWindow messageWindow], 0, str);
 	[[MainViewController instance] refreshMessages];
 }
 
 void iphone_raw_print_bold(const char *str) {
-	//NSLog(@"raw_print_bold %s", str);
+	//DebugLog(@"raw_print_bold %s", str);
 	iphone_raw_print(str);
 }
 
 int iphone_nhgetch() {
-	NSLog(@"nhgetch");
+	DebugLog(@"nhgetch");
 	return 0;
 }
 
 int iphone_nh_poskey(int *x, int *y, int *mod) {
-	//NSLog(@"nh_poskey");
+	//DebugLog(@"nh_poskey");
 	[[MainViewController instance] nhPoskey];
 	NhEvent *e = [[NhEventQueue instance] nextEvent];
 	if (!e.isKeyEvent) {
@@ -405,16 +405,16 @@ int iphone_nh_poskey(int *x, int *y, int *mod) {
 }
 
 void iphone_nhbell() {
-	NSLog(@"nhbell");
+	DebugLog(@"nhbell");
 }
 
 int iphone_doprev_message() {
-	//NSLog(@"doprev_message");
+	//DebugLog(@"doprev_message");
 	return 0;
 }
 
 char iphone_yn_function(const char *question, const char *choices, CHAR_P def) {
-	//NSLog(@"yn_function %s", question);
+	//DebugLog(@"yn_function %s", question);
 	if (!strcmp("Really save?", question) || !strcmp("Overwrite the old file?", question)) {
 		return 'y';
 	}
@@ -433,7 +433,7 @@ char iphone_yn_function(const char *question, const char *choices, CHAR_P def) {
 }
 
 void iphone_getlin(const char *prompt, char *line) {
-	//NSLog(@"getlin %s", prompt);
+	//DebugLog(@"getlin %s", prompt);
 	iphone_putstr(WIN_MESSAGE, 0, prompt);
 	[[MainViewController instance] refreshMessages];
 	[[MainViewController instance] refreshAllViews];
@@ -463,33 +463,33 @@ void iphone_getlin(const char *prompt, char *line) {
 }
 
 int iphone_get_ext_cmd() {
-	//NSLog(@"get_ext_cmd");
+	//DebugLog(@"get_ext_cmd");
 	[[MainViewController instance] showExtendedCommands];
 	NhEvent *e = [[NhEventQueue instance] nextEvent];
 	return e.key;
 }
 
 void iphone_number_pad(int num) {
-	NSLog(@"number_pad %d", num);
+	DebugLog(@"number_pad %d", num);
 }
 
 void iphone_delay_output() {
-	//NSLog(@"delay_output");
+	//DebugLog(@"delay_output");
 #if TARGET_IPHONE_SIMULATOR
 	//usleep(500000);
 #endif	
 }
 
 void iphone_start_screen() {
-	NSLog(@"start_screen");
+	DebugLog(@"start_screen");
 }
 
 void iphone_end_screen() {
-	NSLog(@"end_screen");
+	DebugLog(@"end_screen");
 }
 
 void iphone_outrip(winid wid, int how) {
-	NSLog(@"outrip %x", wid);
+	DebugLog(@"outrip %x", wid);
 }
 
 #pragma mark window API player_selection()

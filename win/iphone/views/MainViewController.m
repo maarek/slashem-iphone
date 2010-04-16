@@ -198,7 +198,7 @@ enum rotation_lock {
 }
 
 - (IBAction)toggleMessageView:(id)sender {
-	[messageView toggleMessageHistory:sender];
+	[messageView toggleView:sender];
 }
 
 #pragma mark view controllers
@@ -280,7 +280,7 @@ enum rotation_lock {
 	if (![NSThread isMainThread]) {
 		[self performSelectorOnMainThread:@selector(refreshMessages) withObject:nil waitUntilDone:NO];
 	} else {
-		messageView.text = [[NhWindow messageWindow] textWithDelimiter:@" "];
+		messageView.text = [[NhWindow messageWindow] text];
 		messageView.messageWindow = [NhWindow messageWindow];
 		NSArray *messages = [[NhWindow statusWindow] messages];
 		if (messages && messages.count == 2) {
@@ -397,7 +397,7 @@ enum rotation_lock {
 			}
 		} else {
 			// no choices, could be everything
-			NSLog(@"no-choice question %@", q.question);
+			DebugLog(@"no-choice question %@", q.question);
 			NSString *args = [q.question substringBetweenDelimiters:@"[]"];
 			
 			NSString *specials = nil, *items = nil;
@@ -417,7 +417,7 @@ enum rotation_lock {
 					[self presentModalViewController:questionViewController animated:YES];
 				}
 			} else {
-				NSLog(@"giving up on question %@", q.question);
+				DebugLog(@"giving up on question %@", q.question);
 			}
 		}
 	}
@@ -561,7 +561,7 @@ enum rotation_lock {
 }
 
 - (void)handleMapTapTileX:(int)x y:(int)y forLocation:(CGPoint)p inView:(UIView *)view {
-	//NSLog(@"tap on %d,%d (u %d,%d)", x, y, u.ux, u.uy);
+	//DebugLog(@"tap on %d,%d (u %d,%d)", x, y, u.ux, u.uy);
 	if (directionQuestion) {
 		if (u.ux == x && u.uy == y) {
 			// tap on self
@@ -576,10 +576,10 @@ enum rotation_lock {
 			directionQuestion = NO;
 			CGPoint delta = CGPointMake(x*32.0f-u.ux*32.0f, y*32.0f-u.uy*32.0f);
 			delta.y *= -1;
-			//NSLog(@"delta %3.2f,%3.2f", delta.x, delta.y);
+			//DebugLog(@"delta %3.2f,%3.2f", delta.x, delta.y);
 			e_direction direction = [ZDirection directionFromEuclideanPointDelta:&delta];
 			int key = [self keyFromDirection:direction];
-			//NSLog(@"key %c", key);
+			//DebugLog(@"key %c", key);
 			[[NhEventQueue instance] addKey:key];
 		}
 	} else if (!iphone_getpos) {
@@ -689,7 +689,7 @@ enum rotation_lock {
 
 #pragma mark PieMenu
 - (void) itemSelected:(PieMenuItem *)item {
-	NSLog(@"Item '%s' selected", [item.title UTF8String]);
+	DebugLog(@"Item '%s' selected", [item.title UTF8String]);
 	[item invoke:self];
 }
 
@@ -704,13 +704,13 @@ enum rotation_lock {
 	[pieMenu removeAllItems];
 	NSDictionary *actions = [NhCommand currentCommands];
 	
-	NSLog(@"Item Count: %d", actions.count);
+	DebugLog(@"Item Count: %d", actions.count);
 
 	if (actions.count > 0) {
-		NSLog(@"Actions: %@", actions);
+		DebugLog(@"Actions: %@", actions);
 
 		for (id menuKey in actions) {
-			NSLog(@"Propogating Key: %@", menuKey);
+			DebugLog(@"Propogating Key: %@", menuKey);
 			PieMenuItem *menuItem = [[PieMenuItem alloc] initWithTitle:menuKey label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:nil];
 			PieMenuItem *moreMenu;
 			NSEnumerator *enumerator = [[actions objectForKey:menuKey] objectEnumerator];
@@ -720,13 +720,13 @@ enum rotation_lock {
 			for (cmd in enumerator) {
 				// If more than 5 NhCommands then create a new sub menu labled More
 				if (cmdCount == 4 && [[actions objectForKey:menuKey] count] > 5) {
-					NSLog(@"Creating the More menu %@ has %d number of entries.", [cmd title], [[actions objectForKey:menuKey] count]);
+					DebugLog(@"Creating the More menu %@ has %d number of entries.", [cmd title], [[actions objectForKey:menuKey] count]);
 					moreMenu = [[PieMenuItem alloc] initWithTitle:@"More" label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:nil];
 					[menuItem addSubItem:moreMenu];	
 				}
 				// Populate More with excess NhCommands
 				if (cmdCount >= 4 && [[actions objectForKey:menuKey] count] > 5) {
-					NSLog(@"Adding Item to More Menu: %@", [cmd title]);
+					DebugLog(@"Adding Item to More Menu: %@", [cmd title]);
 					cmdCount++;
 					PieMenuItem *item = [[PieMenuItem alloc] initWithTitle:[cmd title] label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:cmd];
 					[moreMenu addSubItem:item];
@@ -736,7 +736,7 @@ enum rotation_lock {
 				// Top Level Case
 				if (menuKey == kTopLevel)
 				{
-					NSLog(@"Adding Item: %@", [cmd title]);
+					DebugLog(@"Adding Item: %@", [cmd title]);
 					cmdCount++;
 					PieMenuItem *item = [[PieMenuItem alloc] initWithTitle:[cmd title] label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:nil] command:cmd];
 					[pieMenu addItem:item];
@@ -746,7 +746,7 @@ enum rotation_lock {
 					
 				cmdCount++;
 				
-				NSLog(@"Adding Item: %@", [cmd title]);
+				DebugLog(@"Adding Item: %@", [cmd title]);
 				PieMenuItem *item = [[PieMenuItem alloc] initWithTitle:[cmd title] label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:nil] command:cmd];
 				[menuItem addSubItem:item];
 				[item release];	
@@ -757,7 +757,7 @@ enum rotation_lock {
 			//if (moreMenu) [moreMenu release];  // Release the moreMenu (Causes errors?)
 		}
 	} else {
-		NSLog(@"Too many or too few items in the command list.");
+		DebugLog(@"Too many or too few items in the command list.");
 	}
 	return pieMenu;
 }

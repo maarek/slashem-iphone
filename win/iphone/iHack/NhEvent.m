@@ -65,7 +65,7 @@
 }
 
 - (void) dealloc {
-	//NSLog(@"%@ dealloc", self);
+	//DebugLog(@"%@ dealloc", self);
 	[super dealloc];
 }
 

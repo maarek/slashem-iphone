@@ -76,7 +76,7 @@
 		[allActions setObject:[unsortedDict objectForKey:key] forKey:key];
 		
 		if (![key isKindOfClass:[NSNumber class]]) {
-			NSLog(@"Not a number!?!?");
+			DebugLog(@"Not a number!?!?");
 			continue;
 		}
 		// Whats faster... enum casting to NSNumber or string comparison

@@ -29,15 +29,16 @@
 @interface MessageView : UITextView {
 	
 	NhWindow *messageWindow;
+	CGFloat originalHeight;
 	BOOL historyDisplayed;
-	CGRect originalFrame;
 
 }
 
 @property (nonatomic, retain) NhWindow *messageWindow;
+@property (nonatomic, readonly) BOOL enlarged;
 
 - (void)scrollToBottom;
 - (void)setText:(NSString *)s;
-- (IBAction)toggleView:(id)sender;
+- (IBAction)toggleMessageHistory:(id)sender;
 
 @end

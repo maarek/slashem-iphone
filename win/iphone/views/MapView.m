@@ -30,8 +30,8 @@
 #import "ZTouchInfo.h"
 #import "ZTouchInfoStore.h"
 
-#define kMinimumPinchDelta (10.0f)
-#define kMinimumPanDelta (10.0f)
+#define kMinimumPinchDelta (0.0f)
+#define kMinimumPanDelta (20.0f)
 
 static BOOL s_doubleTapsEnabled = NO;
 
@@ -117,6 +117,15 @@ static BOOL s_doubleTapsEnabled = NO;
 				if (CGRectIntersectsRect(r, rect)) {
 					int glyph = glyphAt(glyphs, i, j);
 					if (glyph != kNoGlyph) {
+						// draw background
+						int backGlyph = back_to_glyph(i, j);
+						if (backGlyph != kNoGlyph && backGlyph != glyph) {
+							// tile 1184, glyph 3627 is dark floor
+							//NSLog(@"back %d in %d,%d (player %d,%d)", glyph2tile[backGlyph], i, j, u.ux, u.uy);
+							CGImageRef tileImg = [[TileSet instance] imageForGlyph:backGlyph atX:i y:j];
+							CGContextDrawImage(ctx, r, tileImg);
+						}
+						// draw front
 						CGImageRef tileImg = [[TileSet instance] imageForGlyph:glyph atX:i y:j];
 						CGContextDrawImage(ctx, r, tileImg);
 						if (u.ux == i && u.uy == j) {
@@ -191,7 +200,7 @@ static BOOL s_doubleTapsEnabled = NO;
 			CGPoint p = [touch locationInView:self];
 			CGPoint delta = CGPointMake(p.x-ti.currentLocation.x, p.y-ti.currentLocation.y);
 			BOOL move = NO;
-			if (!ti.moved && (abs(delta.x)+abs(delta.y) > kMinimumPanDelta)) {
+			if (!ti.moved && (abs(delta.x) > kMinimumPanDelta || abs(delta.y) > kMinimumPanDelta)) {
 				ti.moved = YES;
 				move = YES;
 			} else if (ti.moved) {

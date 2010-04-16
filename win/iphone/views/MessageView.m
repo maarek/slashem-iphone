@@ -33,6 +33,7 @@
 
 - (void)setup {
 	self.font = [self.font fontWithSize:14.0f];
+	originalHeight = self.frame.size.height;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -42,12 +43,31 @@
 	return self;
 }
 
+- (BOOL)enlarged {
+	return self.frame.size.height > originalHeight;
+}
+
+- (void)resize {
+	CGSize contentSize = self.contentSize;
+	CGRect frame = self.frame;
+	frame.size.height = contentSize.height;
+	if (frame.size.height > self.superview.bounds.size.height/3) {
+		frame.size.height = self.superview.bounds.size.height/3;
+	}
+	self.frame = frame;
+}
+
+- (void)shrinkBack {
+	CGRect frame = self.frame;
+	frame.size.height = originalHeight;
+	self.frame = frame;
+	[self scrollToBottom];
+}
+
 - (void)scrollToBottom {
-	CGSize content = self.contentSize;
-	CGSize bounds = self.bounds.size;
-	//NSLog(@"%3.2f (%3.2f / %3.2f)", self.contentOffset.y, content.height, bounds.height);
-	if (content.height > bounds.height) {
-		[self setContentOffset:CGPointMake(0.0f, -(bounds.height-content.height)) animated:YES];
+	CGSize contentSize = self.contentSize;
+	if (contentSize.height > self.bounds.size.height) {
+		[self setContentOffset:CGPointMake(0.0f, -(self.bounds.size.height-contentSize.height)) animated:NO];
 	} else {
 		[self setContentOffset:CGPointMake(0.0f, 0.0f) animated:YES];
 	}
@@ -55,32 +75,22 @@
 
 - (void)setText:(NSString *)s {
 	[super setText:s];
+	if (!s) {
+		[self setContentSize:CGSizeZero];
+	}
+	[self resize];
 	[self scrollToBottom];
+	historyDisplayed = NO; // assume it didn't originate from toggleMessageHistory
 }
 
-- (IBAction)toggleView:(id)sender {
-	static NSString *kEnlarge = @"enlarge";
-	static NSString *kShrink = @"shrink";
-	if (messageWindow) {
-		if (!historyDisplayed) {
-			[self.layer removeAnimationForKey:kEnlarge];
-			 CGRect frame = originalFrame = self.frame;
-			CGRect superBounds = self.superview.bounds;
-			frame.size.height = superBounds.size.height/3;
-			[UIView beginAnimations:kEnlarge context:NULL];
-			self.frame = frame;
-			[self setText:messageWindow.historyText];
-			[UIView commitAnimations];
-			historyDisplayed = YES;
-		} else {
-			[self.layer removeAnimationForKey:kShrink];
-			[UIView beginAnimations:kShrink context:NULL];
-			self.frame = originalFrame;
-			[UIView commitAnimations];
-			historyDisplayed = NO;
-		}
+- (IBAction)toggleMessageHistory:(id)sender {
+	if (historyDisplayed) {
+		[self shrinkBack];
+		historyDisplayed = NO;
+	} else if (messageWindow) {
+		[self setText:messageWindow.historyText];
+		historyDisplayed = YES;
 	}
-	[self scrollToBottom];
 }
 
 #pragma mark UIResponder
@@ -90,6 +100,10 @@
 }
 
 - (BOOL)becomeFirstResponder {
+	if (self.enlarged) {
+		[self shrinkBack];
+		historyDisplayed = NO;
+	}
 	return NO;
 }
 

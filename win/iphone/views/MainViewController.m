@@ -198,7 +198,7 @@ enum rotation_lock {
 }
 
 - (IBAction)toggleMessageView:(id)sender {
-	[messageView toggleView:sender];
+	[messageView toggleMessageHistory:sender];
 }
 
 #pragma mark view controllers
@@ -280,7 +280,7 @@ enum rotation_lock {
 	if (![NSThread isMainThread]) {
 		[self performSelectorOnMainThread:@selector(refreshMessages) withObject:nil waitUntilDone:NO];
 	} else {
-		messageView.text = [[NhWindow messageWindow] text];
+		messageView.text = [[NhWindow messageWindow] textWithDelimiter:@" "];
 		messageView.messageWindow = [NhWindow messageWindow];
 		NSArray *messages = [[NhWindow statusWindow] messages];
 		if (messages && messages.count == 2) {

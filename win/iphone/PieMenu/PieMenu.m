@@ -209,7 +209,7 @@ CGContextRef MyCreateBitmapContext (int pixelsWide, int pixelsHigh) {
 		pos = getposition([items indexOfObject:theItem], items.count, [theItem numberOfSubitems]);
 	}
 	
-	DebugLog(@"POS: %i", pos);
+	DLog(@"POS: %i", pos);
 	
 	for (NSUInteger i = 0; i < [theItem numberOfSubitems] + 1; i++) {
 		if (i == pos) {
@@ -248,7 +248,7 @@ CGContextRef MyCreateBitmapContext (int pixelsWide, int pixelsHigh) {
 		}
 	}
 	
-	DebugLog(@"POS: %i", pos);	
+	DLog(@"POS: %i", pos);	
 	if([path count])[path removeLastObject];
 	
 	for (NSUInteger i = 0; i < subitems.count + 1; i++) {

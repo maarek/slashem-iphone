@@ -53,14 +53,14 @@ extern int unixmain(int argc, char **argv);
 	// create necessary directories
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *baseDirectory = [paths objectAtIndex:0];
-	DebugLog(@"baseDir %@", baseDirectory);
+	DLog(@"baseDir %@", baseDirectory);
 	setenv("NETHACKDIR", [baseDirectory cStringUsingEncoding:NSASCIIStringEncoding], 1);
 	NSString *saveDirectory = [baseDirectory stringByAppendingPathComponent:@"save"];
 	mkdir([saveDirectory cStringUsingEncoding:NSASCIIStringEncoding], 0777);
 	
 	// show directory (for debugging)
 	for (NSString *filename in [[NSFileManager defaultManager] enumeratorAtPath:baseDirectory]) {
-		DebugLog(@"%@", filename);
+		DLog(@"%@", filename);
 	}
 	
 	// set plname (very important for save files and getlock)

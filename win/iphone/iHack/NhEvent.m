@@ -65,7 +65,7 @@
 }
 
 - (void) dealloc {
-	//DebugLog(@"%@ dealloc", self);
+	//DLog(@"%@ dealloc", self);
 	[super dealloc];
 }
 

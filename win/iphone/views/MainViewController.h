@@ -25,6 +25,9 @@
 #import <UIKit/UIKit.h>
 #import "ZDirection.h"
 
+#define bPieMenu 0
+#define bTableMenu 1
+
 @class NhYnQuestion;
 @class NhWindow;
 @class ActionViewController;
@@ -35,6 +38,7 @@
 @class MapView;
 @class ActionBar;
 @class PieMenu;
+
 
 @interface MainViewController : UIViewController <UITextFieldDelegate> {
 
@@ -52,6 +56,7 @@
 	PieMenu *pieMenu;
 	
 	BOOL directionQuestion;
+	BOOL menuType;
 	
 	int clipX;
 	int clipY;
@@ -103,5 +108,7 @@
 - (PieMenu *)pieMenu;
 
 // utility
+- (void) menuOptionsSwitch:(int)segmentIndex;
+- (BOOL) getMenuType;
 
 @end

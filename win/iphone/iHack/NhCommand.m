@@ -77,7 +77,7 @@ static NSArray *g_captions;
 }
 
 + (void)addCommand:(NhCommand *)cmd toCommands:(NSMutableDictionary *)commands key:(NSString *)key {
-	NSArray *keys = [NSArray arrayWithObjects:key, nil];  // Removed kInternal (list of all commands?) Maarek
+	NSArray *keys = [NSArray arrayWithObjects:key, kInternal, nil]; 
 	
 	for (NSString *k in keys) {
 		NSMutableArray *array = [commands objectForKey:k];
@@ -173,12 +173,12 @@ enum InvFlags {
 			if (Is_container(object)) {
 				if (Is_box(object)) { // not a bag or medkit
 					char cmdUntrapDown[] = {M('u'), '>', 'y', 0};
-					[self addCommand:[NhCommand commandWithTitle:"Untrap Container" keys:cmdUntrapDown]
+					[self addCommand:[NhCommand commandWithTitle:"Untrap" keys:cmdUntrapDown]
 						  toCommands:commands key:kFloor];
 					if (object->olocked) {
 						if (inv & fWieldedWeapon) {
 							char forceDown[] = {M('f'), '>', 'y', 0};
-							[self addCommand:[NhCommand commandWithTitle:"Force Container" keys:forceDown]
+							[self addCommand:[NhCommand commandWithTitle:"Force" keys:forceDown]
 								  toCommands:commands key:kFloor];
 						}
 						if (inv & fAppliable) {
@@ -187,12 +187,12 @@ enum InvFlags {
 						}
 					} else {
 						char cmdLoot[] = {M('l'), 'y', 0};
-						[self addCommand:[NhCommand commandWithTitle:"Loot Container" keys:cmdLoot]
+						[self addCommand:[NhCommand commandWithTitle:"Loot" keys:cmdLoot]
 							  toCommands:commands key:kFloor];
 					}
 				} else { // bags, medkit etc.
 					char cmdLoot[] = {M('l'), 'y', 0};
-					[self addCommand:[NhCommand commandWithTitle:"Loot Container" keys:cmdLoot]
+					[self addCommand:[NhCommand commandWithTitle:"Loot" keys:cmdLoot]
 						  toCommands:commands key:kFloor];
 				}
 			} else if (is_edible(object)) {

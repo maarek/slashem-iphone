@@ -110,12 +110,13 @@
 			case WEAPON_CLASS:
 				if (item.object->owornmask & W_WEP) {
 					[actions addObject:[NhCommand commandWithTitle:"Unwield" keys:"w-"]];
-					[actions addObject:[NhCommand commandWithObject:item title:"Force" key:M('f')]];
+					[actions addObject:[NhCommand commandWithTitle:"Force" key:M('f')]];
 					[actions addObject:[NhCommand commandWithTitle:"Set as alternative Weapon" key:'x']];
 				} else {
 					[actions addObject:[NhCommand commandWithObject:item title:"Wield" key:'w']];
 					[actions addObject:[NhCommand commandWithObject:item title:"Quiver" key:'Q']];
 				}
+				[actions addObject:[NhCommand commandWithObject:item title:"Apply" key:'a']];
 				if ([inventory containsObjectClass:POTION_CLASS] ||
 					IS_FOUNTAIN(levl[u.ux][u.uy].typ) || IS_SINK(levl[u.ux][u.uy].typ)) {
 					[actions addObject:[NhCommand commandWithObject:item title:"Dip" key:M('d')]];
@@ -145,6 +146,9 @@
 					[actions addObject:[NhCommand commandWithObject:item title:"Dip" key:M('d')]];
 				}
 				switch (item.object->otyp) {
+					case MAGIC_MARKER:
+						[actions addObject:[NhCommand commandWithObject:item title:"Engrave" key:'E']];
+						break;
 					case BRASS_LANTERN:
 					case OIL_LAMP:
 					case MAGIC_LAMP:

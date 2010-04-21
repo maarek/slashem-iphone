@@ -742,7 +742,9 @@ enum rotation_lock {
 				continue;
 			
 			DLog(@"Propogating Key: %@", menuKey);
-			PieMenuItem *menuItem = [[PieMenuItem alloc] initWithTitle:menuKey label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:@"icon2.png"] command:nil];
+			NSString *menuImg = menuKey;
+			menuImg = [menuImg stringByAppendingString:@".png"];
+			PieMenuItem *menuItem = [[PieMenuItem alloc] initWithTitle:menuKey label:nil target:self selector:@selector(itemSelected:) userInfo:nil icon:[UIImage imageNamed:menuImg] command:nil];
 			PieMenuItem *moreMenu;
 			NSEnumerator *enumerator = [[actions objectForKey:menuKey] objectEnumerator];
 			NhCommand *cmd;

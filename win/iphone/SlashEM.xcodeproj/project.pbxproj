@@ -16,6 +16,9 @@
 		09B338E011627E6000B53F42 /* dropdownButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 09B338DF11627E6000B53F42 /* dropdownButton.png */; };
 		09F4DE84117B876B00D770A3 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F4DE82117B876B00D770A3 /* OptionsViewController.m */; };
 		09F4DE85117B876B00D770A3 /* OptionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 09F4DE83117B876B00D770A3 /* OptionsViewController.xib */; };
+		09F4DF70117E4DF000D770A3 /* Dungeon.png in Resources */ = {isa = PBXBuildFile; fileRef = 09F4DF6F117E4DF000D770A3 /* Dungeon.png */; };
+		09F4DF9B117E553A00D770A3 /* Misc.png in Resources */ = {isa = PBXBuildFile; fileRef = 09F4DF99117E553A00D770A3 /* Misc.png */; };
+		09F4DF9C117E553A00D770A3 /* More.png in Resources */ = {isa = PBXBuildFile; fileRef = 09F4DF9A117E553A00D770A3 /* More.png */; };
 		1D3623260D0F684500981E51 /* SlashEMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* SlashEMAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -419,6 +422,9 @@
 		09F4DE81117B876B00D770A3 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
 		09F4DE82117B876B00D770A3 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
 		09F4DE83117B876B00D770A3 /* OptionsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OptionsViewController.xib; path = views/OptionsViewController.xib; sourceTree = "<group>"; };
+		09F4DF6F117E4DF000D770A3 /* Dungeon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dungeon.png; sourceTree = "<group>"; };
+		09F4DF99117E553A00D770A3 /* Misc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Misc.png; sourceTree = "<group>"; };
+		09F4DF9A117E553A00D770A3 /* More.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = More.png; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* SlashEMAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlashEMAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* SlashEMAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlashEMAppDelegate.m; sourceTree = "<group>"; };
@@ -1075,6 +1081,9 @@
 		4339A7EE115A7E8800741CE5 /* gfx */ = {
 			isa = PBXGroup;
 			children = (
+				09F4DF99117E553A00D770A3 /* Misc.png */,
+				09F4DF9A117E553A00D770A3 /* More.png */,
+				09F4DF6F117E4DF000D770A3 /* Dungeon.png */,
 				093E9D7211633AD0006B0BFE /* icon2.png */,
 				093E9D7311633AD0006B0BFE /* icon3.png */,
 				093E9D7411633AD0006B0BFE /* icon4.png */,
@@ -1939,6 +1948,9 @@
 				093E9D7711633AD0006B0BFE /* icon4.png in Resources */,
 				43E0FB65116E3C10007671D0 /* chozo32c.png in Resources */,
 				09F4DE85117B876B00D770A3 /* OptionsViewController.xib in Resources */,
+				09F4DF70117E4DF000D770A3 /* Dungeon.png in Resources */,
+				09F4DF9B117E553A00D770A3 /* Misc.png in Resources */,
+				09F4DF9C117E553A00D770A3 /* More.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
